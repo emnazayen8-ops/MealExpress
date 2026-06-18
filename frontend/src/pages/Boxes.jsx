@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Loading from '../components/Loading';
+import { API_URL } from '../config/api.js';
 
 const Boxes = () => {
   const [boxes, setBoxes] = useState([]);
@@ -18,7 +19,7 @@ const Boxes = () => {
 
     const fetchBoxes = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5000/api/boxes');
+        const { data } = await axios.get(`${API_URL}/api/boxes`);
         setBoxes(data);
       } catch (err) {
         console.error('Error fetching boxes:', err);
@@ -60,7 +61,7 @@ const Boxes = () => {
                 <div className="h-56 bg-[#F7B9A1] relative overflow-hidden">
                   {box.image ? (
                     <img
-                      src={`http://localhost:5000${box.image}`}
+                      src={`${API_URL}${box.image}`}
                       alt={box.name}
                       className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                     />

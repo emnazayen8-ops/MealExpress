@@ -4,6 +4,7 @@ import BoxForm from '../components/BoxForm';
 import BoxProducts from '../components/BoxProducts';
 import SalesChart from '../components/SalesChart';
 import { useToast } from '../context/ToastContext';
+import { API_URL } from '../config/api.js';
 
 const STATUS_CONFIG = {
   confirmed:  { label: 'Confirmed',   color: 'bg-blue-100 text-blue-700' },
@@ -22,7 +23,7 @@ const SUBJECT_LABELS = {
   other: 'Other',
 };
 
-// ✅ Opens Gmail compose in a new tab
+// Opens Gmail compose in a new tab
 const openGmailReply = (email, subject) => {
   const gmailUrl = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(email)}&su=${encodeURIComponent('Re: ' + subject)}`;
   window.open(gmailUrl, '_blank');
@@ -50,13 +51,18 @@ const AdminDashboard = () => {
   }, []);
 
   const fetchBoxes = async () => {
-    const { data } = await axios.get('http://localhost:5000/api/boxes');
-    setBoxes(data);
+    try {
+      const { data } = await axios.get(`${API_URL}/api/boxes`);
+      setBoxes(data);
+    } catch (err) {
+      toast.error('Error fetching boxes');
+      console.error(err);
+    }
   };
 
   const fetchOrders = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/orders', {
+      const { data } = await axios.get(`${API_URL}/api/orders`, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       setOrders(data);
@@ -67,7 +73,7 @@ const AdminDashboard = () => {
 
   const fetchMessages = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/contact', {
+      const { data } = await axios.get(`${API_URL}/api/contact`, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       setMessages(data);
@@ -79,7 +85,7 @@ const AdminDashboard = () => {
   const handleDeleteBox = async (id) => {
     if (!window.confirm('Delete this box and all its products?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/admin/boxes/${id}`, {
+      await axios.delete(`${API_URL}/api/admin/boxes/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       toast.success('Box deleted successfully!');
@@ -93,7 +99,7 @@ const AdminDashboard = () => {
     setUpdatingOrder(orderId);
     try {
       await axios.put(
-        `http://localhost:5000/api/orders/${orderId}/status`,
+        `${API_URL}/api/orders/${orderId}/status`,
         { status },
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
@@ -108,7 +114,7 @@ const AdminDashboard = () => {
 
   const handleMarkAsRead = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/contact/${id}/read`, {}, {
+      await axios.put(`${API_URL}/api/contact/${id}/read`, {}, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       setMessages((prev) => prev.map((m) => m._id === id ? { ...m, status: 'read' } : m));
@@ -120,7 +126,7 @@ const AdminDashboard = () => {
   const handleDeleteMessage = async (id) => {
     if (!window.confirm('Delete this message?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/contact/${id}`, {
+      await axios.delete(`${API_URL}/api/contact/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       toast.success('Message deleted');
@@ -202,7 +208,7 @@ const AdminDashboard = () => {
               {boxes.map((box) => (
                 <div key={box._id} className="border border-gray-100 rounded-xl p-4 flex items-center gap-4 hover:bg-gray-50 transition">
                   <div className="w-14 h-14 rounded-xl bg-[#F6F6E9] flex items-center justify-center overflow-hidden flex-shrink-0">
-                    {box.image ? <img src={`http://localhost:5000${box.image}`} alt={box.name} className="w-full h-full object-cover" /> : <span className="text-2xl">📦</span>}
+                    {box.image ? <img src={`${API_URL}${box.image}`} alt={box.name} className="w-full h-full object-cover" /> : <span className="text-2xl">📦</span>}
                   </div>
                   <div className="flex-1">
                     <h3 className="font-bold text-[#291B25]">{box.name}</h3>
@@ -377,7 +383,6 @@ const AdminDashboard = () => {
                         <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">{msg.message}</p>
                       </div>
                       <div className="flex items-center justify-between mt-3">
-                        {/* ✅ Opens Gmail compose directly */}
                         <button
                           onClick={() => openGmailReply(msg.email, SUBJECT_LABELS[msg.subject] || msg.subject)}
                           className="bg-[#61A6AB] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#4a8a8f] transition"

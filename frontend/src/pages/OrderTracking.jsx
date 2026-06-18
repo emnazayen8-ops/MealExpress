@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import DeliveryTimeline from '../components/DeliveryTimeline';
 import Loading from '../components/Loading';
+import { API_URL } from '../config/api.js';
 
 const statusLabels = {
   confirmed:  'Confirmed',
@@ -34,7 +35,7 @@ const OrderTracking = () => {
   const fetchOrder = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:5000/api/orders/${id}`,
+        `${API_URL}/api/orders/${id}`,
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
       setOrder(data);
@@ -54,7 +55,7 @@ const OrderTracking = () => {
     setSimulating(true);
     try {
       await axios.put(
-        `http://localhost:5000/api/orders/${id}/status`,
+        `${API_URL}/api/orders/${id}/status`,
         { status: nextStatus },
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
@@ -154,7 +155,7 @@ const OrderTracking = () => {
                 <div className="w-16 h-16 bg-[#F6F6E9] rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0">
                   {order.box?.image ? (
                     <img
-                      src={`http://localhost:5000${order.box.image}`}
+                      src={`${API_URL}${order.box.image}`}
                       alt={order.box.name}
                       className="w-full h-full object-cover"
                     />

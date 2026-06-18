@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_URL } from '../config/api.js';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -11,19 +12,19 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/login', {
+      const { data } = await axios.post(`${API_URL}/api/auth/login`, {
         email,
         password
       });
-      
+
       localStorage.setItem('user', JSON.stringify(data));
-      
+
       if (data.role === 'admin') {
         navigate('/admin');
       } else {
         navigate('/dashboard');
       }
-      
+
       window.location.reload();
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
@@ -34,7 +35,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center px-6">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
         <h2 className="text-3xl font-bold text-[#291B25] mb-6 text-center">Welcome Back</h2>
-        
+
         {error && (
           <div className="bg-red-100 text-red-600 p-3 rounded-lg mb-4 text-sm">
             {error}

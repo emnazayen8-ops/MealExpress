@@ -5,8 +5,11 @@ import upload from '../middleware/uploadMiddleware.js';
 
 const router = express.Router();
 
+// Routes publiques
 router.get('/', getBoxes);
 router.get('/:id', getBoxById);
+
+// Routes admin
 router.post('/', protect, admin, upload.single('image'), createBox);
 router.put('/:id', protect, admin, upload.single('image'), updateBox);
 router.delete('/:id', protect, admin, deleteBox);

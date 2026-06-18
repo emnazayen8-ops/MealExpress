@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useToast } from '../context/ToastContext';
+import { API_URL } from '../config/api.js';
 
 const BoxForm = ({ onClose, onSuccess, editBox }) => {
   const [name, setName] = useState(editBox?.name || '');
@@ -25,8 +26,8 @@ const BoxForm = ({ onClose, onSuccess, editBox }) => {
       if (image) formData.append('image', image);
 
       const url = editBox
-        ? `http://localhost:5000/api/admin/boxes/${editBox._id}`
-        : 'http://localhost:5000/api/admin/boxes';
+        ? `${API_URL}/api/admin/boxes/${editBox._id}`
+        : `${API_URL}/api/admin/boxes`;
       const method = editBox ? 'put' : 'post';
 
       await axios({ method, url, data: formData, headers: { Authorization: `Bearer ${user.token}`, 'Content-Type': 'multipart/form-data' } });

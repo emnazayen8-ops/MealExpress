@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { API_URL } from '../config/api.js';
 
 const statusLabels = {
   confirmed: { text: 'Confirmée', color: 'bg-blue-100 text-blue-700' },
@@ -28,7 +29,7 @@ const OrderCard = ({ order }) => {
         <div className="w-16 h-16 bg-[#F6F6E9] rounded-lg flex items-center justify-center">
           {order.box?.image ? (
             <img 
-              src={`http://localhost:5000${order.box.image}`} 
+              src={`${API_URL}${order.box.image}`} 
               alt={order.box.name}
               className="w-full h-full object-cover rounded-lg"
             />

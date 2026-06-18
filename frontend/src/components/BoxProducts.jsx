@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProductForm from './ProductForm';
 import { useToast } from '../context/ToastContext';
+import { API_URL } from '../config/api.js';
 
 const BoxProducts = ({ box, user }) => {
   const [products, setProducts] = useState([]);
@@ -14,14 +15,14 @@ const BoxProducts = ({ box, user }) => {
   }, []);
 
   const fetchProducts = async () => {
-    const { data } = await axios.get(`http://localhost:5000/api/products/box/${box._id}`);
+    const { data } = await axios.get(`${API_URL}/api/products/box/${box._id}`);
     setProducts(data);
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this product?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/admin/products/${id}`, {
+      await axios.delete(`${API_URL}/api/admin/products/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       toast.success('Product deleted successfully!');
@@ -48,7 +49,7 @@ const BoxProducts = ({ box, user }) => {
           <div key={product._id} className="bg-[#F6F6E9] rounded-lg p-4">
             <div className="h-24 bg-[#61A6AB] rounded-lg mb-2 flex items-center justify-center text-2xl">
               {product.image ? (
-                <img src={`http://localhost:5000${product.image}`} alt={product.name} className="h-full w-full object-cover rounded-lg" />
+                <img src={`${API_URL}${product.image}`} alt={product.name} className="h-full w-full object-cover rounded-lg" />
               ) : '🍽️'}
             </div>
             <h4 className="font-bold text-sm mb-1">{product.name}</h4>

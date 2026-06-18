@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useToast } from '../context/ToastContext';
+import { API_URL } from '../config/api.js';
 
 const ProductForm = ({ onClose, onSuccess, editProduct, boxId }) => {
   const [name, setName] = useState(editProduct?.name || '');
@@ -22,8 +23,8 @@ const ProductForm = ({ onClose, onSuccess, editProduct, boxId }) => {
       if (image) formData.append('image', image);
 
       const url = editProduct
-        ? `http://localhost:5000/api/admin/products/${editProduct._id}`
-        : 'http://localhost:5000/api/admin/products';
+        ? `${API_URL}/api/admin/products/${editProduct._id}`
+        : `${API_URL}/api/admin/products`;
       const method = editProduct ? 'put' : 'post';
 
       await axios({ method, url, data: formData, headers: { Authorization: `Bearer ${user.token}`, 'Content-Type': 'multipart/form-data' } });

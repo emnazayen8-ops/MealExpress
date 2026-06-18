@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
+import { API_URL } from '../config/api.js';
 
 const UserDashboard = () => {
   const [subscriptions, setSubscriptions] = useState([]);
@@ -28,7 +29,7 @@ const UserDashboard = () => {
     const fetchSubscriptions = async () => {
       try {
         const { data } = await axios.get(
-          'http://localhost:5000/api/subscriptions/my-subscriptions',
+          `${API_URL}/api/subscriptions/my-subscriptions`,
           { headers: { Authorization: `Bearer ${user.token}` } }
         );
         setSubscriptions(data);
@@ -42,7 +43,7 @@ const UserDashboard = () => {
     const fetchOrders = async () => {
       try {
         const { data } = await axios.get(
-          'http://localhost:5000/api/orders/my-orders',
+          `${API_URL}/api/orders/my-orders`,
           { headers: { Authorization: `Bearer ${user.token}` } }
         );
         setOrders(data);
@@ -57,12 +58,12 @@ const UserDashboard = () => {
     fetchOrders();
   }, []);
 
-  const handleCancel = async () => {
-    if (!window.confirm('Are you sure you want to cancel your subscription?')) return;
+  const handleCancel = async (subscriptionId) => {
+    if (!window.confirm('Are you sure you want to cancel this subscription?')) return;
     try {
       await axios.post(
-        'http://localhost:5000/api/subscriptions/cancel',
-        {},
+        `${API_URL}/api/subscriptions/cancel`,
+        { subscriptionId },
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
       alert('Subscription cancelled successfully');
@@ -227,7 +228,7 @@ const UserDashboard = () => {
                       <div className="w-20 h-20 flex-shrink-0 bg-[#F6F6E9] rounded-xl flex items-center justify-center overflow-hidden">
                         {order.box?.image ? (
                           <img
-                            src={`http://localhost:5000${order.box.image}`}
+                            src={`${API_URL}${order.box.image}`}
                             alt={order.box.name}
                             className="w-full h-full object-cover"
                           />
@@ -337,7 +338,7 @@ const UserDashboard = () => {
                   <div className="flex items-center gap-5">
                     <div className="w-16 h-16 bg-[#F6F6E9] rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0">
                       {sub.box?.image
-                        ? <img src={`http://localhost:5000${sub.box.image}`} alt={sub.box.name} className="w-full h-full object-cover" />
+                        ? <img src={`${API_URL}${sub.box.image}`} alt={sub.box.name} className="w-full h-full object-cover" />
                         : <span className="text-3xl">📦</span>
                       }
                     </div>
@@ -355,7 +356,7 @@ const UserDashboard = () => {
                   </div>
                   {sub.status === 'active' && (
                     <button
-                      onClick={handleCancel}
+                      onClick={() => handleCancel(sub._id)}
                       className="bg-red-50 text-red-600 border border-red-200 px-4 py-2 rounded-lg hover:bg-red-100 transition font-semibold text-sm"
                     >
                       Cancel

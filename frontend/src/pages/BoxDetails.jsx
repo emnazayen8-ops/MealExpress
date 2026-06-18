@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import Loading from '../components/Loading';
 import { useToast } from '../context/ToastContext';
+import { API_URL } from '../config/api.js';
 
 const BoxDetails = () => {
   const { id } = useParams();
@@ -22,8 +23,8 @@ const BoxDetails = () => {
     const fetchData = async () => {
       try {
         const [boxRes, productsRes] = await Promise.all([
-          axios.get(`http://localhost:5000/api/boxes/${id}`),
-          axios.get(`http://localhost:5000/api/products/box/${id}`)
+          axios.get(`${API_URL}/api/boxes/${id}`),
+          axios.get(`${API_URL}/api/products/box/${id}`)
         ]);
         setBox(boxRes.data);
         setProducts(productsRes.data);
@@ -42,7 +43,7 @@ const BoxDetails = () => {
     setStripeError(false);
     try {
       const { data } = await axios.post(
-        'http://localhost:5000/api/subscriptions/create-checkout-session',
+        `${API_URL}/api/subscriptions/create-checkout-session`,
         { boxId: id },
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
@@ -63,7 +64,7 @@ const BoxDetails = () => {
     setSubscribing(true);
     try {
       await axios.post(
-        'http://localhost:5000/api/subscriptions/simulate',
+        `${API_URL}/api/subscriptions/simulate`,
         { boxId: id },
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
@@ -105,7 +106,7 @@ const BoxDetails = () => {
           <div className="sticky top-24">
             <div className="h-96 bg-[#F7B9A1] rounded-3xl overflow-hidden shadow-xl">
               {box.image ? (
-                <img src={`http://localhost:5000${box.image}`} alt={box.name} className="w-full h-full object-cover" />
+                <img src={`${API_URL}${box.image}`} alt={box.name} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center"><span className="text-9xl">📦</span></div>
               )}
@@ -172,7 +173,7 @@ const BoxDetails = () => {
                 <div key={product._id} className="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 group">
                   <div className="h-32 bg-gradient-to-br from-[#61A6AB] to-[#4a8a8f] rounded-xl mb-4 flex items-center justify-center overflow-hidden">
                     {product.image ? (
-                      <img src={`http://localhost:5000${product.image}`} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                      <img src={`${API_URL}${product.image}`} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                     ) : <span className="text-4xl">🍽️</span>}
                   </div>
                   <h3 className="font-bold text-[#291B25] mb-1">{product.name}</h3>

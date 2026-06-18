@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useToast } from '../context/ToastContext';
+import { API_URL } from '../config/api.js';
 
 const Contact = () => {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
@@ -13,7 +14,7 @@ const Contact = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post('http://localhost:5000/api/contact', form);
+      await axios.post(`${API_URL}/api/contact`, form);
       toast.success('Message sent! We will get back to you within 24 hours.');
       setForm({ name: '', email: '', subject: '', message: '' });
     } catch (err) {
