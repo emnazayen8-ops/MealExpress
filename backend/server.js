@@ -25,7 +25,11 @@ const app = express();
 
 // CORS configuré correctement
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: [
+    'https://meal-express-hhmzuk9x2-meal-express.vercel.app',
+    'https://meal-express-chi.vercel.app',
+    'http://localhost:5173'
+  ],
   credentials: true
 }));
 
