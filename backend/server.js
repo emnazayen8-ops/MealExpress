@@ -18,22 +18,21 @@ import orderRoutes from './routes/orderRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import { stripeWebhook } from './controllers/subscriptionController.js';
 
-// Connexion DB avant de démarrer le serveur
 await connectDB();
 
 const app = express();
 
-// CORS configuré correctement
+// CORS corrigé
 app.use(cors({
   origin: [
-    'https://meal-express-hhmzuk9x2-meal-express.vercel.app',
     'https://meal-express-chi.vercel.app',
+    'https://meal-express-hhmzuk9x2-meal-express.vercel.app',
     'http://localhost:5173'
   ],
   credentials: true
 }));
 
-// Stripe webhook MUST come before express.json()
+// Stripe webhook
 app.post(
   '/api/subscriptions/webhook',
   express.raw({ type: 'application/json' }),
@@ -63,24 +62,15 @@ app.get('/', (req, res) => {
   });
 });
 
-// Serve frontend en production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../frontend/dist')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
-  });
-}
-
-// Error handler global
+// Error handler
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err.message);
   res.status(err.status || 500).json({ 
-    message: err.message || 'Internal server error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    message: err.message || 'Internal server error'
   });
 });
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
