@@ -259,7 +259,7 @@ const UserDashboard = () => {
                       <div className="w-20 h-20 flex-shrink-0 bg-[#F6F6E9] rounded-xl flex items-center justify-center overflow-hidden">
                         {order.box?.image ? (
                           <img
-                            src={`${API_URL}${order.box.image}`}
+                            src={order.box?.image}
                             alt={order.box.name}
                             className="w-full h-full object-cover"
                           />
@@ -369,7 +369,7 @@ const UserDashboard = () => {
                   <div className="flex items-center gap-5">
                     <div className="w-16 h-16 bg-[#F6F6E9] rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0">
                       {sub.box?.image
-                        ? <img src={`${API_URL}${sub.box.image}`} alt={sub.box.name} className="w-full h-full object-cover" />
+                        ? <img src={sub.box?.image} alt={sub.box.name} className="w-full h-full object-cover" />
                         : <span className="text-3xl">📦</span>
                       }
                     </div>

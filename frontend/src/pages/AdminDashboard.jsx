@@ -208,7 +208,7 @@ const AdminDashboard = () => {
               {boxes.map((box) => (
                 <div key={box._id} className="border border-gray-100 rounded-xl p-4 flex items-center gap-4 hover:bg-gray-50 transition">
                   <div className="w-14 h-14 rounded-xl bg-[#F6F6E9] flex items-center justify-center overflow-hidden flex-shrink-0">
-                    {box.image ? <img src={`${API_URL}${box.image}`} alt={box.name} className="w-full h-full object-cover" /> : <span className="text-2xl">📦</span>}
+                    {box.image ? <img src={box.image} alt={box.name} className="w-full h-full object-cover" /> : <span className="text-2xl">📦</span>}
                   </div>
                   <div className="flex-1">
                     <h3 className="font-bold text-[#291B25]">{box.name}</h3>

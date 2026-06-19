@@ -29,7 +29,7 @@ export const createBox = async (req, res) => {
       description,
       price,
       interval: interval || 'monthly',
-      image: req.file ? `/uploads/${req.file.filename}` : ''
+      image: req.file ? req.file.path : ''
     });
     res.status(201).json(box);
   } catch (error) {
@@ -50,7 +50,7 @@ export const updateBox = async (req, res) => {
     box.interval = req.body.interval || box.interval;
     
     if (req.file) {
-      box.image = `/uploads/${req.file.filename}`;
+      box.image = req.file.path;
     }
 
     const updatedBox = await box.save();

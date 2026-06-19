@@ -49,7 +49,7 @@ const BoxProducts = ({ box, user }) => {
           <div key={product._id} className="bg-[#F6F6E9] rounded-lg p-4">
             <div className="h-24 bg-[#61A6AB] rounded-lg mb-2 flex items-center justify-center text-2xl">
               {product.image ? (
-                <img src={`${API_URL}${product.image}`} alt={product.name} className="h-full w-full object-cover rounded-lg" />
+                <img src={product.image} alt={product.name} className="h-full w-full object-cover rounded-lg" />
               ) : '🍽️'}
             </div>
             <h4 className="font-bold text-sm mb-1">{product.name}</h4>

@@ -16,7 +16,7 @@ export const createProduct = async (req, res) => {
       box,
       name,
       description,
-      image: req.file ? `/uploads/${req.file.filename}` : ''
+      image: req.file ? req.file.path : ''
     });
     res.status(201).json(product);
   } catch (error) {
@@ -35,7 +35,7 @@ export const updateProduct = async (req, res) => {
     product.description = req.body.description || product.description;
     
     if (req.file) {
-      product.image = `/uploads/${req.file.filename}`;
+      product.image = req.file.path;
     }
 
     const updatedProduct = await product.save();
