@@ -106,7 +106,7 @@ const BoxDetails = () => {
           <div className="sticky top-24">
             <div className="h-96 bg-[#F7B9A1] rounded-3xl overflow-hidden shadow-xl">
               {box.image ? (
-                <img src={`${API_URL}${box.image}`} alt={box.name} className="w-full h-full object-cover" />
+                <img src={box.image} alt={box.name} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center"><span className="text-9xl">📦</span></div>
               )}

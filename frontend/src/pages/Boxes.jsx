@@ -61,7 +61,7 @@ const Boxes = () => {
                 <div className="h-56 bg-[#F7B9A1] relative overflow-hidden">
                   {box.image ? (
                     <img
-                      src={`${API_URL}${box.image}`}
+                      src={box.image}
                       alt={box.name}
                       className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                     />

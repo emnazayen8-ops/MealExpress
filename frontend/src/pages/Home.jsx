@@ -91,7 +91,7 @@ const Home = () => {
               <div key={box._id} className="bg-white bg-opacity-5 border border-white border-opacity-10 rounded-2xl overflow-hidden hover:bg-opacity-10 transition-all duration-300 group">
                 <div className="h-48 bg-[#F7B9A1] bg-opacity-20 flex items-center justify-center overflow-hidden">
                   {box.image ? (
-                    <img src={`${API_URL}${box.image}`} alt={box.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <img src={box.image} alt={box.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   ) : (
                     <span className="text-6xl">📦</span>
                   )}
