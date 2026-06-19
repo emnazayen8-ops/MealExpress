@@ -22,9 +22,9 @@ const ProductForm = ({ onClose, onSuccess, editProduct, boxId }) => {
       formData.append('box', boxId);
       if (image) formData.append('image', image);
 
-      const url = editBox
-         ? `${API_URL}/api/products/${editBox._id}`
-         : `${API_URL}/api/products`;
+      const url = editProduct
+          ? `${API_URL}/api/products/${editProduct._id}`
+          : `${API_URL}/api/products`;
       const method = editProduct ? 'put' : 'post';
 
       await axios({ method, url, data: formData, headers: { Authorization: `Bearer ${user.token}`, 'Content-Type': 'multipart/form-data' } });
