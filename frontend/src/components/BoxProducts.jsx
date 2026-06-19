@@ -22,7 +22,7 @@ const BoxProducts = ({ box, user }) => {
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this product?')) return;
     try {
-      await axios.delete(`${API_URL}/api/admin/products/${id}`, {
+      await axios.delete(`${API_URL}/api/products/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       toast.success('Product deleted successfully!');

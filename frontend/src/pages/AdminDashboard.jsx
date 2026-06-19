@@ -85,7 +85,7 @@ const AdminDashboard = () => {
   const handleDeleteBox = async (id) => {
     if (!window.confirm('Delete this box and all its products?')) return;
     try {
-      await axios.delete(`${API_URL}/api/admin/boxes/${id}`, {
+      await axios.delete(`${API_URL}/api/boxes/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       toast.success('Box deleted successfully!');
