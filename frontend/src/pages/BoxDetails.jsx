@@ -173,7 +173,7 @@ const BoxDetails = () => {
                 <div key={product._id} className="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 group">
                   <div className="h-32 bg-gradient-to-br from-[#61A6AB] to-[#4a8a8f] rounded-xl mb-4 flex items-center justify-center overflow-hidden">
                     {product.image ? (
-                      <img src={`${API_URL}${product.image}`} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                      <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                     ) : <span className="text-4xl">🍽️</span>}
                   </div>
                   <h3 className="font-bold text-[#291B25] mb-1">{product.name}</h3>
