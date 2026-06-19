@@ -155,7 +155,7 @@ const OrderTracking = () => {
                 <div className="w-16 h-16 bg-[#F6F6E9] rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0">
                   {order.box?.image ? (
                     <img
-                      src={`${API_URL}${order.box.image}`}
+                      src={box.image}
                       alt={order.box.name}
                       className="w-full h-full object-cover"
                     />
