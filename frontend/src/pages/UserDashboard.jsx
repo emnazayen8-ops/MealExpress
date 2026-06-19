@@ -16,14 +16,45 @@ const UserDashboard = () => {
 
   useEffect(() => {
     // Check for success param after Stripe redirect
-    if (searchParams.get('success') === 'true') {
-      setShowSuccess(true);
-      // Remove the param from URL without reload
-      setSearchParams({});
-      // Auto-hide after 6 seconds
-      setTimeout(() => setShowSuccess(false), 6000);
+     if (searchParams.get('success') === 'true') {
+         setShowSuccess(true);
+         // Remove the param from URL without reload
+         setSearchParams({});
+        // Auto-hide after 6 seconds
+        setTimeout(() => setShowSuccess(false), 6000);
+      }
+  }, [searchParams, setSearchParams]);
+
+  // Recharger les données quand un paiement Stripe réussit
+  useEffect(() => {
+    if (showSuccess) {
+      const reloadData = async () => {
+        setLoadingSubs(true);
+        setLoadingOrders(true);
+        try {
+          const [subsRes, ordersRes] = await Promise.all([
+            axios.get(`${API_URL}/api/subscriptions/my-subscriptions`, {
+              headers: { Authorization: `Bearer ${user.token}` }
+            }),
+            axios.get(`${API_URL}/api/orders/my-orders`, {
+              headers: { Authorization: `Bearer ${user.token}` }
+            })
+          ]);
+          setSubscriptions(subsRes.data);
+          setOrders(ordersRes.data);
+        } catch (err) {
+          console.error('Error reloading data:', err);
+        } finally {
+          setLoadingSubs(false);
+          setLoadingOrders(false);
+        }
+      };
+      
+      // Attendre 2 secondes pour laisser le webhook Stripe traiter
+      const timer = setTimeout(reloadData, 2000);
+      return () => clearTimeout(timer);
     }
-  }, []);
+  }, [showSuccess, user.token]);
 
   useEffect(() => {
     const fetchSubscriptions = async () => {

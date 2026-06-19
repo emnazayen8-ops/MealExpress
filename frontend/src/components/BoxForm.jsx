@@ -26,8 +26,8 @@ const BoxForm = ({ onClose, onSuccess, editBox }) => {
       if (image) formData.append('image', image);
 
       const url = editBox
-        ? `${API_URL}/api/admin/boxes/${editBox._id}`
-        : `${API_URL}/api/admin/boxes`;
+          ? `${API_URL}/api/boxes/${editBox._id}`
+          : `${API_URL}/api/boxes`;
       const method = editBox ? 'put' : 'post';
 
       await axios({ method, url, data: formData, headers: { Authorization: `Bearer ${user.token}`, 'Content-Type': 'multipart/form-data' } });

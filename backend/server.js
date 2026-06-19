@@ -22,7 +22,6 @@ await connectDB();
 
 const app = express();
 
-// CORS corrigé
 app.use(cors({
   origin: [
     'https://meal-express-chi.vercel.app',
@@ -32,7 +31,7 @@ app.use(cors({
   credentials: true
 }));
 
-// Stripe webhook
+// Stripe webhook MUST come before express.json()
 app.post(
   '/api/subscriptions/webhook',
   express.raw({ type: 'application/json' }),
@@ -45,7 +44,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Routes API
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/boxes', boxRoutes);
 app.use('/api/products', productRoutes);
@@ -53,21 +52,17 @@ app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/contact', contactRoutes);
 
-// Health check
 app.get('/', (req, res) => {
-  res.json({ 
-    message: 'MealExpress API is running',
+  res.json({
+    message: 'MealExpress API is running 🚀',
     env: process.env.NODE_ENV || 'development',
     timestamp: new Date().toISOString()
   });
 });
 
-// Error handler
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err.message);
-  res.status(err.status || 500).json({ 
-    message: err.message || 'Internal server error'
-  });
+  res.status(err.status || 500).json({ message: err.message || 'Internal server error' });
 });
 
 const PORT = process.env.PORT || 5000;
