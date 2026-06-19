@@ -154,9 +154,9 @@ const OrderTracking = () => {
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 bg-[#F6F6E9] rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0">
                   {order.box?.image ? (
-                    <img
-                      src={box.image}
-                      alt={order.box.name}
+                    <img 
+                      src={order.box?.image || ''} 
+                      alt={order.box?.name || 'Box'} 
                       className="w-full h-full object-cover"
                     />
                   ) : (
