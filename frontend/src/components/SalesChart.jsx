@@ -67,22 +67,29 @@ const SalesChart = ({ orders, boxes }) => {
     return Object.values(map);
   }, [orders]);
 
-  // ── Orders & Revenue per box — dynamic from both orders AND boxes ────────
   const boxData = useMemo(() => {
-    // Start with all boxes (even those with 0 orders)
-    const map = {};
-    boxes.forEach((box) => {
-      map[box.name] = { name: box.name, orders: 0, revenue: 0 };
-    });
-    // Fill in order data
-    orders.forEach((o) => {
-      const name = o.box?.name || 'Unknown';
-      if (!map[name]) map[name] = { name, orders: 0, revenue: 0 };
-      map[name].orders += 1;
-      map[name].revenue += o.box?.price || 0;
-    });
-    return Object.values(map);
-  }, [orders, boxes]);
+  // Créer un Set des noms de boxes actives pour recherche rapide
+  const activeBoxNames = new Set(boxes.map(box => box.name));
+  
+  // Start with all boxes (even those with 0 orders)
+  const map = {};
+  boxes.forEach((box) => {
+    map[box.name] = { name: box.name, orders: 0, revenue: 0 };
+  });
+  
+  // Fill in order data - only for active boxes
+  orders.forEach((o) => {
+    const name = o.box?.name;
+    // Ignorer les orders sans box ou avec une box inactive
+    if (!name || !activeBoxNames.has(name)) return;
+    
+    if (!map[name]) map[name] = { name, orders: 0, revenue: 0 };
+    map[name].orders += 1;
+    map[name].revenue += o.box?.price || 0;
+  });
+  
+  return Object.values(map);
+}, [orders, boxes]);
 
   // ── KPIs ────────────────────────────────────────────────────────────────
   const totalRevenue = orders.reduce((sum, o) => sum + (o.box?.price || 0), 0);
