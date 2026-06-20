@@ -1,4 +1,6 @@
 import Box from '../models/Box.js';
+import Order from '../models/Order.js';
+import Subscription from '../models/Subscription.js';
 
 export const getBoxes = async (req, res) => {
   try {
@@ -67,8 +69,24 @@ export const deleteBox = async (req, res) => {
       return res.status(404).json({ message: 'Box not found' });
     }
 
+    // Vérifier si des orders existent pour cette box
+    const ordersCount = await Order.countDocuments({ box: req.params.id });
+    if (ordersCount > 0) {
+      return res.status(400).json({ 
+        message: `Cannot delete: this box has ${ordersCount} order(s). Delete orders first or deactivate the box instead.` 
+      });
+    }
+
+    // Vérifier aussi les subscriptions
+    const subsCount = await Subscription.countDocuments({ box: req.params.id });
+    if (subsCount > 0) {
+      return res.status(400).json({ 
+        message: `Cannot delete: this box has ${subsCount} active subscription(s). Cancel subscriptions first.` 
+      });
+    }
+
     await Box.deleteOne({ _id: req.params.id });
-    res.json({ message: 'Box removed' });
+    res.json({ message: 'Box removed successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
