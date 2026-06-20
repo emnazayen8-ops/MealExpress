@@ -4,7 +4,12 @@ import Subscription from '../models/Subscription.js';
 
 export const getBoxes = async (req, res) => {
   try {
-    const boxes = await Box.find({ isActive: true });  // ← Filtre ici
+    const boxes = await Box.find({
+      $or: [
+        { isActive: true },
+        { isActive: { $exists: false } }  // ← Accepte aussi les anciennes boxes
+      ]
+    });
     res.json(boxes);
   } catch (error) {
     res.status(500).json({ message: error.message });
