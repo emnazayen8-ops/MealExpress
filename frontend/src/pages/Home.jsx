@@ -98,7 +98,7 @@ const Home = () => {
                 </div>
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-bold text-white text-lg">{box.name}</h3>
+                    <h3 className="font-bold text-[#291B25] text-lg">{box.name}</h3>
                     <span className="text-[#ED5B2D] font-bold text-xl">${box.price}</span>
                   </div>
                   <p className="text-gray-400 text-sm mb-5 line-clamp-2">{box.description}</p>
