@@ -19,6 +19,10 @@ const boxSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  isActive: { 
+    type: Boolean, 
+    default: true 
+  },
   interval: {
     type: String,
     enum: ['monthly', 'quarterly'],

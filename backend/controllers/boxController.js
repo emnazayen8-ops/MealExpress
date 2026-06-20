@@ -4,7 +4,7 @@ import Subscription from '../models/Subscription.js';
 
 export const getBoxes = async (req, res) => {
   try {
-    const boxes = await Box.find();
+    const boxes = await Box.find({ isActive: true });  // ← Filtre ici
     res.json(boxes);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -13,7 +13,10 @@ export const getBoxes = async (req, res) => {
 
 export const getBoxById = async (req, res) => {
   try {
-    const box = await Box.findById(req.params.id);
+    const box = await Box.findOne({ 
+      _id: req.params.id,
+      isActive: true  // ← Ajoute ce filtre
+    });
     if (!box) {
       return res.status(404).json({ message: 'Box not found' });
     }
@@ -31,7 +34,8 @@ export const createBox = async (req, res) => {
       description,
       price,
       interval: interval || 'monthly',
-      image: req.file ? req.file.path : ''
+      image: req.file ? req.file.path : '',
+      isActive: true  // ← Ajoute ceci
     });
     res.status(201).json(box);
   } catch (error) {
@@ -69,27 +73,11 @@ export const deleteBox = async (req, res) => {
       return res.status(404).json({ message: 'Box not found' });
     }
 
-    // Vérifier si des orders existent pour cette box
-    const ordersCount = await Order.countDocuments({ box: req.params.id });
-    if (ordersCount > 0) {
-      return res.status(400).json({ 
-        message: `Cannot delete: this box has ${ordersCount} order(s). Delete orders first.` 
-      });
-    }
+    // Soft delete : marquer comme inactive
+    box.isActive = false;
+    await box.save();
 
-    // Vérifier seulement les subscriptions ACTIVES (pas cancelled)
-    const subsCount = await Subscription.countDocuments({ 
-      box: req.params.id,
-      status: 'active'  // ← Ajoute cette condition
-    });
-    if (subsCount > 0) {
-      return res.status(400).json({ 
-        message: `Cannot delete: this box has ${subsCount} active subscription(s). Cancel subscriptions first.` 
-      });
-    }
-
-    await Box.deleteOne({ _id: req.params.id });
-    res.json({ message: 'Box removed successfully' });
+    res.json({ message: 'Box deactivated successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
