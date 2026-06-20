@@ -73,12 +73,15 @@ export const deleteBox = async (req, res) => {
     const ordersCount = await Order.countDocuments({ box: req.params.id });
     if (ordersCount > 0) {
       return res.status(400).json({ 
-        message: `Cannot delete: this box has ${ordersCount} order(s). Delete orders first or deactivate the box instead.` 
+        message: `Cannot delete: this box has ${ordersCount} order(s). Delete orders first.` 
       });
     }
 
-    // Vérifier aussi les subscriptions
-    const subsCount = await Subscription.countDocuments({ box: req.params.id });
+    // Vérifier seulement les subscriptions ACTIVES (pas cancelled)
+    const subsCount = await Subscription.countDocuments({ 
+      box: req.params.id,
+      status: 'active'  // ← Ajoute cette condition
+    });
     if (subsCount > 0) {
       return res.status(400).json({ 
         message: `Cannot delete: this box has ${subsCount} active subscription(s). Cancel subscriptions first.` 
