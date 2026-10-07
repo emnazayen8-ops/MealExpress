@@ -18,7 +18,7 @@ MealExpress is a full-stack subscription e-commerce platform built with React, N
 ## 🎬 Demo Video
 
 🔗 [Watch the full demo (2 min)]
-(https://streamable.com/kyi56d)
+(https://streamable.com/23ogco)
 
 ---
 
